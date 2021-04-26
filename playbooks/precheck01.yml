@@ -1,0 +1,52 @@
+---
+- name: Precheck playbook    # this is just meta data (display name)
+  hosts: localhost           # consider ALL parts of the ansible inventory
+  connection: local          # use a local conneciton type (connect to the localhost)
+  gather_facts: yes          # ansible runs a module called setup.py (which doesn't set up anything, just defines variables)
+
+  vars:
+          expected_free_mem: 70 # expected to have at least this much free memory on target machine
+          expected_os_family: Debian # expected to have this as the ansible_os_family
+
+
+  tasks:
+          # example of displaying the value of a var to the screen (in this case, ansible_facts)
+          - name: What are the facts that were collected?
+            debug:
+                    var: ansible_facts           # usually ansible_facts is the auto defined variable for *_facts modules
+
+          - name: display the value of ansible_facts.distribution
+            debug:
+                    var: ansible_facts.distribution  # ansible_facts['distribution']
+
+          - name: display the value of ansible_facts.os_family
+            debug:
+                    var: ansible_facts.os_family
+
+          - name: "assert THAT ansible_facts.os_family IS {{expected_os_family}}"
+            assert:
+                    that: ansible_facts.os_family == expected_os_family
+
+          - name: assert THAT ansible_facts.distribution is Ubuntu
+            assert:
+                    that: ansible_facts.distribution == 'Ubuntu'
+
+          - name: version of python
+            debug:
+                    var: ansible_python_version[0]|int
+
+          - name: assert that ansible_facts.python_version is 3.x or higher
+            assert:
+                    #that: ansible_facts.python_version > '3'
+                    #that: ansible_python_version[0] == "3"
+                    that: ansible_python.version.major >= 3
+
+          - name: "assert ansible_facts.memfree_mb is higher than {{expected_free_mem}} mb"
+            assert:
+                    that: ansible_facts.memfree_mb > expected_free_mem
+                    #         fail_ msg: 'free space must be higher than 100mb'
+          
+          - name: Ensure all systems are type "Debian"
+            fail:
+                    msg: "Precheck condition FAILURE - not a debian system"
+            when: ansible_facts.os_family != "Debian"
