@@ -60,7 +60,6 @@
           - name: "Diplay the value of available size for {{my_mount}}"
             debug:
                     var: ansible_mounts|json_query('[?mount == `/`].size_available')
-            when: '"True" in my_debug'
 
           - name: set a variable for free space
             set_fact:
@@ -69,7 +68,6 @@
           - name: Display the var my_free_space
             debug:
                     var: my_free_space
-            when: '"True" in my_debug'
 
           -  name: "Assert that there is enough disk space in {{my_mount}}"
              assert:
