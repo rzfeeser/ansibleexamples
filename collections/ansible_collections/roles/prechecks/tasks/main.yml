@@ -1,0 +1,66 @@
+---
+# tasks file for /home/student/mans/roles/prechecks/
+# example of displaying the value of a var to the screen (in this case, ansible_facts)
+# example of displaying the value of a var to the screen (in this case, ansible_facts)
+- name: What are the facts that were collected?
+  debug:
+          var: ansible_facts           # usually ansible_facts is the auto defined variable for *_facts modules
+
+
+- name: display the value of ansible_facts.distribution
+  debug:
+          var: ansible_facts.distribution  # ansible_facts['distribution']
+
+
+- name: display the value of ansible_facts.os_family
+  debug:
+          var: ansible_facts.os_family
+
+
+- name: "assert THAT ansible_facts.os_family IS {{expected_os_family}}"
+  assert:
+          that: ansible_facts.os_family == expected_os_family
+
+- name: assert THAT ansible_facts.distribution is Ubuntu
+  assert:
+          that: ansible_facts.distribution == 'Ubuntu'
+
+- name: version of python
+  debug:
+          var: ansible_python_version[0]|int
+
+- name: assert that ansible_facts.python_version is 3.x or higher
+  assert:
+          #that: ansible_facts.python_version > '3'
+          #that: ansible_python_version[0] == "3"
+          that: ansible_python.version.major >= 3
+
+- name: "assert ansible_facts.memfree_mb is higher than {{expected_free_mem}} mb"
+  assert:
+          that: ansible_facts.memfree_mb > expected_free_mem
+          #         fail_ msg: 'free space must be higher than 100mb'
+
+- name: Ensure all systems are type "Debian"
+  fail:
+          msg: "Precheck condition FAILURE - not a debian system"
+  when: ansible_facts.os_family != "Debian"
+  
+- name: "Diplay the value of available size for {{my_mount}}"
+  debug:
+          var: ansible_mounts|json_query('[?mount == `/`].size_available')
+
+- name: set a variable for free space
+  set_fact:
+          my_free_space: "{{ ansible_mounts|json_query('[?mount == `/`].size_available') }}"
+
+- name: Display the var my_free_space
+  debug:
+          var: my_free_space
+
+-  name: "Assert that there is enough disk space in {{my_mount}}"
+   assert:
+          that:
+            - my_free_space[0] > expected_free_space
+          #quiet: yes
+          fail_msg: "Three is not enough space to proceed"
+          success_msg: "There is enough space to proceed"

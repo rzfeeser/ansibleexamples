@@ -1,0 +1,13 @@
+---
+- name: Precheck playbook    # this is just meta data (display name)
+  hosts: localhost           # consider ALL parts of the ansible inventory
+  connection: local          # use a local conneciton type (connect to the localhost)
+  gather_facts: yes          # ansible runs a module called setup.py (which doesn't set up anything, just defines variables)
+
+  collections:
+          - acmeinc.middleware
+
+  tasks:
+          - name: Run our precheck role, which is part of the collection
+            import_role:     #include_role:
+                    name: prechecks
