@@ -64,3 +64,4 @@
           #quiet: yes
           fail_msg: "Three is not enough space to proceed"
           success_msg: "There is enough space to proceed"
+   when: my_free_space|length > 0
