@@ -7,21 +7,27 @@
   vars:
           expected_free_mem: 70 # expected to have at least this much free memory on target machine
           expected_os_family: Debian # expected to have this as the ansible_os_family
+          #expected_free_space: 25000000000   # False Condition
+          expected_free_space: 15000000000   # True Condition
 
 
   tasks:
+
           # example of displaying the value of a var to the screen (in this case, ansible_facts)
           - name: What are the facts that were collected?
             debug:
                     var: ansible_facts           # usually ansible_facts is the auto defined variable for *_facts modules
 
+
           - name: display the value of ansible_facts.distribution
             debug:
                     var: ansible_facts.distribution  # ansible_facts['distribution']
 
+
           - name: display the value of ansible_facts.os_family
             debug:
                     var: ansible_facts.os_family
+
 
           - name: "assert THAT ansible_facts.os_family IS {{expected_os_family}}"
             assert:
@@ -50,3 +56,25 @@
             fail:
                     msg: "Precheck condition FAILURE - not a debian system"
             when: ansible_facts.os_family != "Debian"
+            
+          - name: "Diplay the value of available size for {{my_mount}}"
+            debug:
+                    var: ansible_mounts|json_query('[?mount == `/`].size_available')
+            when: '"True" in my_debug'
+
+          - name: set a variable for free space
+            set_fact:
+                    my_free_space: "{{ ansible_mounts|json_query('[?mount == `/`].size_available') }}"
+
+          - name: Display the var my_free_space
+            debug:
+                    var: my_free_space
+            when: '"True" in my_debug'
+
+          -  name: "Assert that there is enough disk space in {{my_mount}}"
+             assert:
+                    that:
+                      - my_free_space[0] > {{min_free_space}}
+                    #quiet: yes
+                    fail_msg: "Three is not enough space to proceed"
+                    success_msg: "There is enough space to proceed"
