@@ -21,9 +21,9 @@
   assert:
           that: ansible_facts.os_family == expected_os_family
 
-- name: assert THAT ansible_facts.distribution is Ubuntu
+- name: "assert THAT ansible_facts.distribution is {{expected_distro}}"
   assert:
-          that: ansible_facts.distribution == 'Ubuntu'
+          that: ansible_facts.distribution == expected_distro
 
 - name: version of python
   debug:
@@ -40,10 +40,10 @@
           that: ansible_facts.memfree_mb > expected_free_mem
           #         fail_ msg: 'free space must be higher than 100mb'
 
-- name: Ensure all systems are type "Debian"
+- name: "Ensure all systems are type {{expected_os_family}}"
   fail:
-          msg: "Precheck condition FAILURE - not a debian system"
-  when: ansible_facts.os_family != "Debian"
+          msg: "Precheck condition FAILURE - not a {{expected_os_family}} os_family"
+  when: ansible_facts.os_family != expected_os_family
   
 - name: "Diplay the value of available size for {{my_mount}}"
   debug:
