@@ -4,3 +4,4 @@ expected_free_mem: 70 # expected to have at least this much free memory on targe
 expected_os_family: Debian # expected to have this as the ansible_os_family
 #expected_free_space: 25000000000   # False Condition
 expected_free_space: 15000000000   # True Condition
+expected_distro: Ubuntu # set the expected distro
