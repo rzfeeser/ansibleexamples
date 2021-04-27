@@ -72,7 +72,7 @@
           -  name: "Assert that there is enough disk space in {{my_mount}}"
              assert:
                     that:
-                      - my_free_space[0] > {{min_free_space}}
+                      - my_free_space[0] > expected_free_space
                     #quiet: yes
                     fail_msg: "Three is not enough space to proceed"
                     success_msg: "There is enough space to proceed"
