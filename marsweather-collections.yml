@@ -1,5 +1,5 @@
 ---
-- name: Playbook using custom module  # adding comments
+- name: Playbook using custom module
   hosts: localhost
   connection: local
   
