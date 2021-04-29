@@ -1,0 +1,67 @@
+---
+- name: playbook awx
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars_files:
+          - vault.yml
+
+  vars:
+          user: admin            # username for tower
+          towerpass: towerpass   # password for tower
+
+          # data for building out awx
+          listofgithubs:
+                  - name: zach
+                    github: rzfeeser
+                  - name: dave
+                    github: dewatts
+
+  collections:
+          - awx.awx
+
+  tasks:
+          - name: Setting up a few new student projects
+            loop: "{{ listofgithubs }}"
+            tower_project:
+                    scm_type: git
+                    scm_url: "https://github.com/{{ item.github }}/awxwebhook"
+                    scm_branch: main
+                    name: "{{ item.name }}webhookproject"
+                    description: "a project created via the API"
+                    tower_host: "http://192.168.70.21"
+                    tower_username: "{{ user }}"
+                    tower_password: "{{ towerpass }}"
+                    validate_certs: false
+                    state: present
+                    #tower_config_file: "~/towercli.cfg" # seems to inisit on HTTPS
+                                                         # probs a good thing
+                                                         #
+          - name: Create a job template
+            tower_job_template:
+                    tower_host: "http://192.168.70.21"
+                    tower_username: "{{ user }}"
+                    tower_password: "{{ towerpass }}"
+                    name: "{{ item.name }} - webhook job"
+                    project: "{{ item.name }}webhookproject"
+                    inventory: localhost
+                    playbook: playbook.yml
+                    webhook_service: github
+            loop: "{{ listofgithubs }}"
+            register: results
+
+          - name: show what the webhook and url are
+            debug:
+                    var: results
+
+          - name: trigger a job to run
+            loop: "{{ listofgithubs }}"
+            tower_job_launch:
+                    job_template: "{{ item.name }} - webhook job"
+                    tower_host: "http://192.168.70.21"
+                    tower_username: "{{ user }}"
+                    tower_password: "{{ towerpass }}"
+                    # extra_vars:
+                    #     var1: mappedtothisvalue
+                    #     cat: timmythecat
