@@ -5,7 +5,7 @@
   gather_facts: yes          # ansible runs a module called setup.py (which doesn't set up anything, just defines variables)
 
   collections:
-          - acmeinc.middleware
+          - acmeinc.middleware 
 
   tasks:
           - name: Run our precheck role, which is part of the collection
