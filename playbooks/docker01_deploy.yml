@@ -1,0 +1,41 @@
+---
+- name: Launch a Docker container with Ansible
+  hosts: localhost    # dockerplatform  ansible_user=jim ansible_host=10.0.2.3 ansible_password=qwerty123
+  gather_facts: true  # required for ansible.buitlin.package
+  vars:
+    python_interpreter: /usr/bin/python3.10
+    container_name: my_app_container
+    image_name: nginx:latest
+    published_port: "8080:80"
+
+  pre_tasks:
+    - name: Install requirements for solution to run
+      ansible.builtin.pip:
+        name: requests
+        state: present
+
+  tasks:
+    - name: Ensure Docker is installed
+      ansible.builtin.package:      # python3 package.py --name docker --state present
+        name: docker
+        state: present
+
+    - name: Ensure Docker service is running
+      ansible.builtin.service:      # python service.py --name docker --state started --enabled true
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Pull Docker image
+      community.docker.docker_image:
+        name: "{{ image_name }}"
+        source: pull
+
+    - name: Run Docker container
+      community.docker.docker_container:
+        name: "{{ container_name }}"
+        image: "{{ image_name }}"
+        state: started
+        restart_policy: always
+        published_ports:
+          - "{{ published_port }}"
