@@ -14,12 +14,12 @@ Hey gang! Professor Feeser here. This repository contains Ansible best practice 
   - **/prechecks/** - a role created from /playbooks/precheck01.yml
 
 
-## Demos
+## Video Demos
 Videos demonstrating the code in this repository are available on the author's [YouTube Channel @CodeWithFeeser](https://www.youtube.com/@CodeWithFeeser):  
 
 - [YouTube CodeWithFeeser - Learn Ansible - Deploy Docker Containers](https://www.youtube.com/watch?v=Z5ktStoJrU4)
 
-If you found the video helpful, be sure to hit **like** and **subscribe** for weekly lessons from CodeWithFeeser.
+If you found a video helpful, be sure to hit **like** and **subscribe** for weekly lessons from [YouTube Channel @CodeWithFeeser](https://www.youtube.com/@CodeWithFeeser)
 
 
 ## How to Use This Repository
