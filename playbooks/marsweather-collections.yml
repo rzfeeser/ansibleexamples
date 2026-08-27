@@ -1,0 +1,21 @@
+---
+- name: Playbook using custom module
+  hosts: localhost
+  connection: ansible.builtin.local   # don't let ansible assume ansible.builtin
+  gather_facts: false  # no need to collect facts for this playbook
+
+  vars:
+    name: 2021-04-27-marsweather   # the module adds *.txt to the file name
+    apikey: cSensdfsdf-EXAMPLE-    # see api.nasa.gov
+
+
+  # DO NOT USE THE WORD COLLECTIONS IN MODERN ANSIBLE PLAYBOOKS
+  # IT WAS A TEMPORARY WORD TO HELP FOLKS UPDATE FROM PRECOLLECTION DAYS
+  #collections:   # from library import *
+  #  - rzfeeser.nasa_api        # acmeinc.middleware.nasa_mars_weather
+
+  tasks:
+  - name: Pull mars weather
+    rzfeeser.nasa_api.nasa_mars_weather:    # is this from acmeinc or nasa?
+      name: "{{ name }}"                    # the module adds *.txt to the file name
+      apikey: "{{ apikey }}"                # see api.nasa.gov

@@ -3,27 +3,28 @@ Hey gang! Professor Feeser here. This repository contains Ansible best practice 
 
 
 ## Structure
-### /
-  - **precheck01-withcollections.yml** - a playbook that does not require an ansible.cfg as it uses best practice directory structure. Collections can be auto searched @ collections/ansible_collections/
-
 ### /playbooks
-  - **precheck01.yml** - a playbook performing a basic precheck routine
-  - **precheck01-withroles.yml** - a playbook performing a basic precheck routine using /roles/prechecks/
+  - **precheck01.yml** - a playbook performing a basic system precheck routine
+  - **precheck01-withroles.yml** - a precheck playbook that runs the `prechecks` role
+  - **precheck01-collections.yml** - a precheck playbook that runs the `prechecks` role using the repository's collection-aware configuration
+  - **docker01_deploy.yml** - a playbook that installs Docker, pulls an image, and launches a container
+  - **marsweather-collections.yml** - a playbook that uses the `rzfeeser.nasa_api` collection to pull Mars weather data
+  - **playbook-awx-project-template.yml** - a playbook that creates AWX projects and job templates
   
 ### /roles
-  - **/prechecks/** - a role created from /playbooks/precheck01.yml
+  - **/prechecks/** - a role containing the reusable tasks, defaults, handlers, variables, metadata, and tests for the precheck routine
 
 
 ## Video Demos
 Videos demonstrating the code in this repository are available on the author's [YouTube Channel @CodeWithFeeser](https://www.youtube.com/@CodeWithFeeser):  
 
-- [YouTube CodeWithFeeser - Learn Ansible - Deploy Docker Containers](https://www.youtube.com/watch?v=Z5ktStoJrU4)
+- [YouTube CodeWithFeeser - Learn Ansible - Deploy Docker Containers with playbooks/docker01_deploy.yml](https://www.youtube.com/watch?v=Z5ktStoJrU4)
 
 If you found a video helpful, be sure to hit **like** and **subscribe** for weekly lessons from [YouTube Channel @CodeWithFeeser](https://www.youtube.com/@CodeWithFeeser)
 
 
 ## How to Use This Repository
-This repository is a best practice repository I use for teaching structure and organization of playbooks. If you have any suggestions, feel free to open an issue. If you haven't already, be sure to watch the videos I have posted on using the content found in this repository [YouTube CodeWithFeeser - Learn Ansible - Deploy Docker Containers](https://www.youtube.com/watch?v=Z5ktStoJrU4)
+This repository is a best practice repository I use for teaching structure and organization of playbooks. If you have any suggestions, feel free to open an issue. If you haven't already, be sure to watch the video demonstrating [playbooks/docker01_deploy.yml](https://www.youtube.com/watch?v=Z5ktStoJrU4).
 
 
 ## Helpful Notes

@@ -1,5 +1,5 @@
 ---
-- name: Launch a Docker container with Ansible
+- name: Launch a docker container with Ansible
   hosts: localhost    # dockerplatform  ansible_user=jim ansible_host=10.0.2.3 ansible_password=qwerty123
   gather_facts: true  # required for ansible.buitlin.package
   vars:
