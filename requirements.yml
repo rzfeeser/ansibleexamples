@@ -1,0 +1,9 @@
+---
+# This file contains references to the collections needed to make solutions in this repository run
+collections:
+  # Install collection directly from GitHub
+  - src: https://github.com/rzfeeser/ansible-custom-modules-nasa-api
+    scm: git
+    version: "main"
+  # Using a short name assumes the dependency is available on Ansible Galaxy
+  # - name: rzfeeser.nasa_api
